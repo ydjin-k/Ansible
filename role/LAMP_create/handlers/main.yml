@@ -1,0 +1,7 @@
+---
+# handlers file for LAMP_create
+- name: apache reloader
+  service:
+    name: apache2.service
+    state: reloaded
+  # listen: apache reloader

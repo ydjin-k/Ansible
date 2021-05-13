@@ -1,0 +1,59 @@
+---
+# tasks file for db
+# MySQL Configuration
+- name: Sets the root password
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    login_host: locahost
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+#
+- name: copy .my.cnf file with root password credentials
+  template:
+    dest: /root/.my.cnf
+    src: templates/my.cnf.j2
+    owner: root
+    mode: '0600'
+  # notify:
+  #   - mysql reloader
+#
+- name: Removes all anonymous user accounts
+  mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+    login_user: root
+    login_host: localhost
+    login_password: "{{ mysql_root_password }}"
+#
+- name: Removes the MySQL test database
+  mysql_db:
+    name: test
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Create bitrix and joomla db and wp db
+  mysql_db:
+    name: "{{ item }}"
+    state: present
+    # login_host: localhost
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  loop: ['bitrix_db', 'joomla_db', 'wp_db']
+#
+- name: Create bitrix and joomla and wp users
+  mysql_user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    state: present
+    # login_host: localhost
+    priv: "{{ item.priv }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  loop:
+    - {name: 'bitrix_db', password: "{{ bitrix_db_password }}", priv: "*.*:ALL,GRANT"}
+    - {name: 'joomla_db', password: "{{ joomla_db_password }}", priv: "*.*:ALL,GRANT"}
+    - {name: 'wp_db', password: "{{ wp_db_password }}", priv: "*.*:ALL,GRANT"}

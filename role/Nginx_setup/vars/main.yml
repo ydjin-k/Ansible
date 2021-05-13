@@ -1,0 +1,9 @@
+---
+# vars file for Nginx_setup
+nginx_conf_path: /etc/nginx/sites-enabled
+doc_root: /var/www/html
+index_page_h2: Test Ansible page with jinja
+server_name: "example.org www.example.org"
+bitrix_server_name: "luchiyhost.ru www.luchiyhost.ru"
+joomla_server_name: "joomtest.ru www.joomtest.ru"
+wordpress_server_name: "wptest.ru www.wptest.ru"

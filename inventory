@@ -1,0 +1,9 @@
+all:
+  hosts:
+    ansible:
+      ansible_ssh_host: 185.91.52.143
+      ansible_ssh_user: root
+      ansible_password: 1Hves3zig7l6
+      ansible_python_interpreter: /usr/bin/python3
+      ansible_ssh_common_args: -o UserKnownHostsFile=/dev/null
+    

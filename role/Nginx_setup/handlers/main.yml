@@ -1,0 +1,7 @@
+---
+# handlers file for Nginx_setup
+- name: nginx reloader
+  service:
+    name: nginx
+    state: reloaded
+    # when: nginx -t succes

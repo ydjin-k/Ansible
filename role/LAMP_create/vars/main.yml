@@ -1,0 +1,14 @@
+---
+# vars file for web
+doc_root: /var/www/html
+bitrix_dir: /var/www/bitrix
+joomla_dir: /var/www/joomla
+wordpress_dir: /var/www/
+apache_conf_path: /etc/apache2/sites-available/
+short_open_tag: "On"
+display_errors: "On"
+php_version: 7.2
+php_date_timezon: Europe/Moscow
+need_copy_and_extract: True 
+need_download_and_extract_joomla: True
+need_download_and_extract_wordpress: True

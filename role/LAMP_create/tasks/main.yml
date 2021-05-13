@@ -1,0 +1,98 @@
+---
+# tasks file for web
+- name: Install LAMP packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+  loop: [ 'apache2', 'mysql-server', 'python3-pymysql', 'php', 'php-xml', 'php-gd', 'php-mysql', 'php-mbstring' , 'php-soap' , 'php-xmlrpc' , 'php-json', 'libapache2-mod-php', 'unzip' ]
+#
+- name: Set nginx vhost, apache config, enable new apache site, and php.ini
+  template:
+    src: '{{ item.src }}'
+    dest: '{{ item.desc }}'
+  loop:
+    - {src: apache.ports.conf.j2, desc: "/etc/apache2/ports.conf"}
+    - {src: apache.conf.j2, desc: "{{ apache_conf_path }}/000-default.conf"}
+    - {src: php.ini.j2, desc: "/etc/php/{{ php_version }}/apache2/php.ini"}
+    # 
+
+  notify:
+    - apache reloader
+# Create site dirs
+- name: Create site dirs
+  file:
+    path: '{{ item.path }}'
+    state: directory
+    recurse: yes
+    owner: '{{ item.owner }}'
+    group: '{{ item.group }}'
+  loop:
+    - {path: '{{bitrix_dir}}', owner: 'www-data' ,  group: 'www-data'}
+    - {path: '{{joomla_dir}}', owner: 'www-data' ,  group: 'www-data'}
+    - {path: '{{wordpress_dir}}', owner: 'www-data' ,  group: 'www-data'}
+    - {path: /var/www , owner: 'www-data' ,  group: 'www-data'}
+    # '{{joomla_dir}}']
+# Copy phpinfo files to server
+- name: Copy phpinfo files to server
+  copy:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+      owner: www-data
+      group: www-data
+      mode: '0644'
+  loop:
+    - {src: phpinfo.php, dest: "{{ bitrix_dir }}/phpinfo.php"}
+    - {src: phpinfo.php, dest: "{{ joomla_dir }}/phpinfo.php"}
+    - {src: phpinfo.php, dest: "{{ wordpress_dir }}/phpinfo.php"}
+
+# Download site wordpress
+- name: Download sites wordpress
+  get_url:
+    url: https://ru.wordpress.org/latest-ru_RU.zip
+    dest: /var/www/wordpress.zip
+  when: "{{ need_download_and_extract_wordpress }}"
+  
+
+# Extract files
+- name: Extract wordpress.zip into /var/www/wordpress
+  unarchive:
+    remote_src: yes
+    src: /var/www/wordpress.zip
+    dest: '{{ wordpress_dir }}'
+    owner: www-data
+    group: www-data
+    mode: '0755'
+  when: "{{ need_download_and_extract_wordpress }}"
+
+# Download site joomla
+- name: Download sites joomla
+  get_url:
+    url: https://downloads.joomla.org/ru/cms/joomla3/3-9-25/Joomla_3-9-25-Stable-Full_Package.zip
+    dest: /var/www/joomla.zip
+  when: "{{ need_download_and_extract_joomla }}"
+  
+
+# Extract files
+- name: Extract joomla.zip into /var/www/joomla
+  unarchive:
+    remote_src: yes
+    src: /var/www/joomla.zip
+    dest: '{{ joomla_dir }}'
+  when: "{{ need_download_and_extract_joomla }}"
+  
+#
+- name: Extract bitrix.tar.gz into /var/www/bitrix
+  unarchive:
+    src: bitrix.tar.gz
+    dest: '{{ bitrix_dir }}'
+    owner: www-data
+    group: www-data
+    mode: '0755'
+  when: "{{ need_copy_and_extract }}"
+#
+- name: Enable the Apache2 module remoteip
+  apache2_module:
+    state: present
+    name: remoteip
+  notify:
+    - apache reloader

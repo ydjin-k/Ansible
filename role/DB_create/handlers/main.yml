@@ -1,0 +1,6 @@
+---
+# handlers file for DB_create
+- name: mysql reloader
+  service:
+    name: mysql
+    state: reloaded

@@ -1,0 +1,22 @@
+---
+- name: apache reloader
+  service:
+    name: apache2
+    state: restarted
+  # listen: apache reloader
+
+- name: nginx reloader
+  service:
+    name: nginx
+    state: reloaded
+    # when: nginx -t succes
+
+- name: mysql reloader
+  service:
+      name: mysql
+      state: reloaded
+
+- name: php reloader
+  service:
+    name: php
+    state: reloaded

@@ -1,0 +1,11 @@
+---
+- hosts: ansible
+  # tasks:
+  #  - name:  Update apt
+  #    apt:
+  #     update_cache: yes
+  roles:
+    - role: 'role/Nginx_setup'
+    - role: 'role/LAMP_create'
+    - role: 'role/DB_create'
+    

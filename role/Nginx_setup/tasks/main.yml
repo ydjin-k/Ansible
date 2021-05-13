@@ -1,0 +1,22 @@
+---
+# tasks file for nginx
+- name:  Update apt
+  apt:
+    update_cache: yes
+#
+- name: Install nginx
+  apt:
+    name: nginx
+    state: latest
+  notify: nginx reloader
+
+- name: Set nginx vhost
+  template:
+    src: '{{ item.src }}'
+    dest: '{{ item.desc }}'
+  loop:
+    - {src: host1.conf.j2, desc: "{{ nginx_conf_path }}/default"}
+    - {src: index.j2, desc: "{{ doc_root }}/index.html"}
+    #  потом убрать 'templates/index.j2'?
+  notify:
+    - nginx reloader

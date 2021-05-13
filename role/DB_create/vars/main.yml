@@ -1,0 +1,6 @@
+---
+# vars file for DB_create
+mysql_root_password: "root@123AZ"
+bitrix_db_password: "BITRIX@123bitrix"
+joomla_db_password: "JOOMLA@123joomla"
+wp_db_password: "WP@1234wordrepss"

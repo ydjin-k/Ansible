@@ -1,0 +1,54 @@
+<VirtualHost 127.0.0.1:8080>
+   ServerAdmin webmaster@localhost
+   ServerName luchiyhost.ru
+   ServerAlias www.luchiyhost.ru
+   DocumentRoot {{ bitrix_dir }}
+   ErrorLog ${APACHE_LOG_DIR}/error.log
+   CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+   <Directory {{ bitrix_dir }}>
+         AllowOverride All
+         Options -Indexes
+   </Directory>
+
+   <IfModule mod_dir.c>
+       DirectoryIndex index.php index.html phpinfo.php index.cgi index.pl  index.xhtml index.htm
+   </IfModule>
+
+</VirtualHost>
+
+<VirtualHost 127.0.0.1:8081>
+   ServerName joomtest.ru
+   ServerAlias wwww.joomtest.ru
+   ServerAdmin webmaster@localhost
+   DocumentRoot {{ joomla_dir }}
+   ErrorLog ${APACHE_LOG_DIR}/error.log
+   CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+   <Directory {{ joomla_dir }}>
+         Options -Indexes
+   </Directory>
+
+   <IfModule mod_dir.c>
+       DirectoryIndex index.php index.html phpinfo.php index.cgi index.pl  index.xhtml index.htm
+   </IfModule>
+
+</VirtualHost>
+
+<VirtualHost 127.0.0.1:8082>
+   ServerName wptest.ru
+   ServerAlias wwww.wptest.ru
+   ServerAdmin webmaster@localhost
+   DocumentRoot {{ wordpress_dir }}
+   ErrorLog ${APACHE_LOG_DIR}/error.log
+   CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+   <Directory {{ wordpress_dir }}>
+         Options -Indexes
+   </Directory>
+
+   <IfModule mod_dir.c>
+       DirectoryIndex index.php index.html phpinfo.php index.cgi index.pl  index.xhtml index.htm
+   </IfModule>
+
+</VirtualHost>

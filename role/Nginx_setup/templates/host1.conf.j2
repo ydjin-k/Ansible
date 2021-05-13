@@ -1,0 +1,79 @@
+server{
+    server_name example12.org www.example12.org;
+    listen 80;
+    root {{ doc_root }};
+
+    location / {
+		try_files $uri $uri/ =404;
+	}
+
+    location ~* \.(jpg|jpeg|gif|png|ico|css|bmp|swf|js|doc|docx|pdf|xls|xlsx|rar|zip|tbz|7z|exe)$ {
+                    root /var/www/html/drach.pro/;
+                    expires 10d;
+    }
+}
+
+
+server{
+    server_name luchiyhost.ru www.luchiyhost.ru;
+    listen 80;
+    root {{ bitrix_dir }};
+
+    location ~* \.(jpg|jpeg|gif|png|ico|css|bmp|swf|js|doc|docx|pdf|xls|woff|woff2|xlsx|rar|zip|tbz|7z)$ {
+                    root {{ bitrix_dir }};
+                    expires 10d;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8080/;
+        proxy_redirect     off;
+        log_not_found      off;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   Host $http_host;
+    }
+   
+
+}
+
+server{
+    server_name  joomtest.ru www.joomtest.ru;
+    listen 80;
+    root {{ joomla_dir }};
+
+    location ~* \.(jpg|jpeg|gif|png|ico|css|bmp|swf|js|doc|docx|pdf|xls|woff|woff2|xlsx|rar|zip|tbz|7z)$ {
+                    root {{ joomla_dir }};
+                    expires 10d;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8081/;
+        proxy_redirect     off;
+        log_not_found      off;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   Host $http_host;
+    }
+
+
+}
+
+
+server{
+    server_name  wptest.ru www.wptest.ru;
+    listen 80;
+    root {{ wordpress_dir }};
+
+    location ~* \.(jpg|jpeg|gif|png|ico|css|bmp|swf|js|doc|docx|pdf|xls|woff|woff2|xlsx|rar|zip|tbz|7z)$ {
+                    root {{ wordpress_dir }};
+                    expires 10d;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8082/;
+        proxy_redirect     off;
+        log_not_found      off;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   Host $http_host;
+    }
+
+
+}
